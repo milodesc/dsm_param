@@ -1,13 +1,27 @@
 <?php
 
 /**
- * Implements hook_menu().
+ * Implements hook_permission().
  */
 function dsm_param_permission() {
   return array(
     'administer parameter message' => array(
-      'title'=>t('Administer the Parameter Message module.'),
-      'description'=>t('Perform administration tasks on the Parameter Message module.'),
+      'title' => t('Administer the Parameter Message module.'),
+      'description' => t('Perform administration tasks on the Parameter Message module.'),
     )
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function dsm_param_menu() {
+  $items['admin/config/dsm_param'] = array(
+    'title' => 'Parameter Message',
+    'description' => "Manage the Parameter Message module.",
+    'page callback' => 'dsm_parameter_admin',
+    'access arguments' => array('administer parameter message'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'dsm_param.admin.inc',
   );
 }
