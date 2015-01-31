@@ -18,7 +18,7 @@ function dsm_param_admin() {
   $form['dsm_param_parameter_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Parameter Name'),
-    '#default_value' => variable_get('parameter_name', 'dsm_param_name'),
+    '#default_value' => variable_get('dsm_param_parameter_name', 'dsm_param_name'),
     '#size' => 60,
     '#maxlength' => 64,
     '#description' => t("If a parameter with this name is in the URL, drupal will set a message for the user with the parameter's value"),
