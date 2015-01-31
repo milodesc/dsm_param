@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implements hook_menu().
+ */
 function dsm_param_permission() {
   return array(
     'administer parameter message' => array(
