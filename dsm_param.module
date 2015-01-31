@@ -18,10 +18,12 @@ function dsm_param_permission() {
 function dsm_param_menu() {
   $items['admin/config/dsm_param'] = array(
     'title' => 'Parameter Message',
-    'description' => "Manage the Parameter Message module.",
-    'page callback' => 'dsm_parameter_admin',
+    'description' => 'Manage the Parameter Message module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dsm_param_admin'),
     'access arguments' => array('administer parameter message'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'dsm_param.admin.inc',
   );
+  return $items;
 }
