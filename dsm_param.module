@@ -1,7 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: patrick
- * Date: 1/30/15
- * Time: 8:28 PM
- */
+
+function dsm_param_permission() {
+  return array(
+    'administer parameter message' => array(
+      'title'=>t('Administer the Parameter Message module.'),
+      'description'=>t('Perform administration tasks on the Parameter Message module.'),
+    )
+  );
+}
