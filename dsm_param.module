@@ -27,3 +27,13 @@ function dsm_param_menu() {
   );
   return $items;
 }
+
+/**
+ * Implements hook_init().
+ */
+function dsm_param_init() {
+  $target_param = variable_get('dsm_param_parameter_name', NULL);
+  if (!empty($target_param) && !empty($_GET[$target_param])) {
+    drupal_set_message($_GET[$target_param]);
+  }
+}
