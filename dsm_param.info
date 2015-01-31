@@ -1,3 +1,4 @@
 name = Parameter Message
 description = A module which sets a drupal message if a particular parameter is given in the URL.
 core = 7.x
+configure = admin/config/dsm_param
