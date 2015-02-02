@@ -23,6 +23,17 @@ function dsm_param_admin() {
     '#maxlength' => 64,
     '#description' => t("If a parameter with this name is in the URL, drupal will set a message for the user with the parameter's value"),
   );
+  $form['dsm_param_parameter_status'] = array(
+    '#type' => 'select',
+    '#title' => t('Message Status'),
+    '#default_value' => variable_get('dsm_param_parameter_status', 'status'),
+    '#description' => t("The message's type, either status, warning or error."),
+    '#options' => array(
+      'status' => t('Status'),
+      'warning' => t('Warning'),
+      'error' => t('Error'),
+    ),
+  );
 
   return system_settings_form($form);
 }
