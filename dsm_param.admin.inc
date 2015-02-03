@@ -34,6 +34,16 @@ function dsm_param_admin() {
       'error' => t('Error'),
     ),
   );
+  $form['dsm_param_parameter_repeat'] = array(
+    '#type' => 'radios',
+    '#title' => ('Repeat Message'),
+    '#default_value' => variable_get('dsm_param_parameter_repeat', 'FALSE'),
+    '#description' => t("If this is set to False and the message has already been set, then the message won't be repeated."),
+    '#options' => array(
+      'TRUE' => t('True'),
+      'FALSE' => t('False'),
+    ),
+  );
 
   return system_settings_form($form);
 }
