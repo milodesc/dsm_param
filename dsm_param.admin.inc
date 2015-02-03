@@ -23,10 +23,10 @@ function dsm_param_admin() {
     '#maxlength' => 64,
     '#description' => t("If a parameter with this name is in the URL, drupal will set a message for the user with the parameter's value"),
   );
-  $form['dsm_param_parameter_status'] = array(
+  $form['dsm_param_message_status'] = array(
     '#type' => 'select',
     '#title' => t('Message Status'),
-    '#default_value' => variable_get('dsm_param_parameter_status', 'status'),
+    '#default_value' => variable_get('dsm_param_message_status', 'status'),
     '#description' => t("The message's type, either status, warning or error."),
     '#options' => array(
       'status' => t('Status'),
@@ -34,10 +34,10 @@ function dsm_param_admin() {
       'error' => t('Error'),
     ),
   );
-  $form['dsm_param_parameter_repeat'] = array(
+  $form['dsm_param_message_repeate'] = array(
     '#type' => 'radios',
     '#title' => ('Repeat Message'),
-    '#default_value' => variable_get('dsm_param_parameter_repeat', 'FALSE'),
+    '#default_value' => variable_get('dsm_param_message_repeate', 'FALSE'),
     '#description' => t("If this is set to False and the message has already been set, then the message won't be repeated."),
     '#options' => array(
       'TRUE' => t('True'),

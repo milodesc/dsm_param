@@ -35,8 +35,8 @@ function dsm_param_init() {
   $target_param = variable_get('dsm_param_parameter_name', NULL);
   if (!empty($target_param) && !empty($_GET[$target_param])) {
     $msg = filter_xss($_GET[$target_param]);
-    $msg_type = variable_get('dsm_param_parameter_status', 'status');
-    $msg_repeat = variable_get('dsm_param_parameter_repeat', 'TRUE') === 'TRUE' ? TRUE : FALSE;
+    $msg_type = variable_get('dsm_param_message_status', 'status');
+    $msg_repeat = variable_get('dsm_param_message_repeate', 'TRUE') === 'TRUE' ? TRUE : FALSE;
     drupal_set_message($msg, $msg_type, $msg_repeat);
   }
 }
