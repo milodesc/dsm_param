@@ -26,7 +26,7 @@ function dsm_param_schema() {
         'description' => "If this is set to False and the message has already been set, then the message won't be repeated.",
       ),
     ),
+    'primary key' => array('parameter_name'),
   );
-
   return $schema;
 }
