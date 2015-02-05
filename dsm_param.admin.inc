@@ -53,5 +53,11 @@ function dsm_param_admin() {
 }
 
 function dsm_param_admin_submit($form, &$form_state) {
-  drupal_set_message("here!");
+  db_insert('dsm_param_parameters')
+    ->fields(array(
+      'parameter_name' => $form['dsm_param_parameter_name']['#value'],
+      'message_status' => $form['dsm_param_message_status']['#value'],
+      'repeat_message' => $form['dsm_param_message_repeat']['#value'],
+    ))
+    ->execute();
 }
