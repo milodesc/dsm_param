@@ -44,6 +44,14 @@ function dsm_param_admin() {
       'FALSE' => t('False'),
     ),
   );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
 
-  return system_settings_form($form);
+  return $form;
+}
+
+function dsm_param_admin_submit($form, &$form_state) {
+  drupal_set_message("here!");
 }
