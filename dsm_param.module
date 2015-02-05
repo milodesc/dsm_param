@@ -30,7 +30,16 @@ function dsm_param_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dsm_param_create_parameter'),
     'access arguments' => array('administer parameter message'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
+    'file' => 'dsm_param.admin.inc',
+  );
+  $items['admin/config/dsm_param/%/delete'] = array(
+    'title' => 'Delete Parameter Message',
+    'description' => 'Delete a Parameter Message.',
+    'page callback' => 'dsm_param_delete_parameter',
+    'page arguments' => array(3),
+    'access arguments' => array('administer parameter message'),
+    'type' => MENU_CALLBACK,
     'file' => 'dsm_param.admin.inc',
   );
   return $items;
