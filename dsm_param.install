@@ -33,6 +33,9 @@ function dsm_param_schema() {
       ),
     ),
     'primary key' => array('pid'),
+    'unique keys' => array(
+      'parameter_name' => array('parameter_name'),
+    )
   );
   return $schema;
 }
