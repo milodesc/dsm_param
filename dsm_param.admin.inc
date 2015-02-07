@@ -24,7 +24,7 @@ function dsm_param_admin() {
       $parameter->parameter_name,
       $parameter->message_status,
       $parameter->repeat_message,
-      l(t('Edit'), 'admin/config/dsm_param/edit/' . $parameter->pid) . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete'),
+      l(t('Edit'), 'admin/config/dsm_param/' . $parameter->pid . '/edit') . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete'),
     );
   }
   if (!empty($rows)) {
@@ -49,6 +49,82 @@ function dsm_param_admin() {
  * @see dsm_param_menu()
  */
 function dsm_param_create_parameter() {
+  $form = dsm_param_get_param_form();
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Create Parameter',
+  );
+  return $form;
+}
+
+function dsm_param_create_parameter_validate($form, &$form_state) {
+  dsm_param_validate_param_form($form);
+}
+
+function dsm_param_create_parameter_submit($form, &$form_state) {
+  db_insert('dsm_param_parameters')
+    ->fields(array(
+      'parameter_name' => $form['dsm_param_parameter_name']['#value'],
+      'message_status' => $form['dsm_param_message_status']['#value'],
+      'repeat_message' => $form['dsm_param_message_repeat']['#value'],
+    ))
+    ->execute();
+  drupal_set_message('Your parameter has been saved.');
+  drupal_goto('admin/config/dsm_param');
+}
+
+function dsm_param_edit_parameter($form, $form_state,  $pid) {
+  $parameter_message = dsm_param_get_parameter($pid);
+  $form = dsm_param_get_param_form();
+  $form['dsm_param_parameter_name']['#default_value'] = $parameter_message->parameter_name;
+  $form['dsm_param_message_status']['#default_value'] = $parameter_message->message_status;
+  $form['dsm_param_message_repeat']['#default_value'] = $parameter_message->repeat_message;
+  $form['dsm_param_pid'] = array(
+    '#value' => $parameter_message->pid,
+    '#type' => 'hidden',
+    '#access' => FALSE,
+  );
+  $form['edit_flag'] = array(
+    '#type' => 'hidden',
+    '#value' => 1,
+    '#access' => FALSE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save Parameter',
+  );
+  return $form;
+}
+
+function dsm_param_edit_parameter_validate($form, &$form_state) {
+  dsm_param_validate_param_form($form);
+}
+
+function dsm_param_edit_parameter_submit($form, &$form_state) {
+  $pid = $form['dsm_param_pid']['#value'];
+  db_update('dsm_param_parameters')
+    ->fields(array(
+      'parameter_name' => $form['dsm_param_parameter_name']['#value'],
+      'message_status' => $form['dsm_param_message_status']['#value'],
+      'repeat_message' => $form['dsm_param_message_repeat']['#value'],
+    ))
+    ->condition('pid', $pid)
+    ->execute();
+  drupal_set_message('The ' . $form['dsm_param_parameter_name']['#value'] . ' parameter was saved.');
+  drupal_goto('admin/config/dsm_param');
+}
+
+function dsm_param_delete_parameter($pid) {
+  $result = db_query("select * from {dsm_param_parameters} where pid = :pid", array(':pid' => $pid));
+  $parameter_message = $result->fetchObject();
+  db_delete('dsm_param_parameters')
+    ->condition('pid', $parameter_message->pid)
+    ->execute();
+  drupal_set_message("Deleted " . $parameter_message->parameter_name);
+  drupal_goto('admin/config/dsm_param');
+}
+
+function dsm_param_get_param_form () {
   $form = array();
   $form['dsm_param_parameter_name'] = array(
     '#type' => 'textfield',
@@ -81,28 +157,26 @@ function dsm_param_create_parameter() {
     ),
     '#required' => TRUE,
   );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'Create Parameter',
-  );
 
   return $form;
 }
 
-function dsm_param_create_parameter_validate($form, &$form_state) {
+function dsm_param_validate_param_form($form) {
   $parameter_name = $form['dsm_param_parameter_name']['#value'];
 
   // Don't let admins create a parameter called 'q', since that is used on every
   // page request in Drupal.
   if($parameter_name == 'q') {
-    form_set_error('dsm_param_parameter_name', "'q' is and invalid name for a parameter. Please choose another name.");
+    form_set_error('dsm_param_parameter_name', "'q' is an invalid name for a parameter. Please choose another name.");
   }
 
-  // Check if name supplied is already used.
-  $result = db_query('select parameter_name from {dsm_param_parameters}');
-  foreach($result as $parameter) {
-    if($parameter_name == $parameter->parameter_name) {
-      form_set_error('dsm_param_parameter_name', 'The parameter name is already in use. Please choose another name.');
+  if($form['edit_flag']['#value'] != 1) {
+    // Check if name supplied is already used.
+    $result = db_query('select parameter_name from {dsm_param_parameters}');
+    foreach($result as $parameter) {
+      if($parameter_name == $parameter->parameter_name) {
+        form_set_error('dsm_param_parameter_name', 'The parameter name is already in use. Please choose another name.');
+      }
     }
   }
 
@@ -121,24 +195,7 @@ function dsm_param_create_parameter_validate($form, &$form_state) {
   }
 }
 
-function dsm_param_create_parameter_submit($form, &$form_state) {
-  db_insert('dsm_param_parameters')
-    ->fields(array(
-      'parameter_name' => $form['dsm_param_parameter_name']['#value'],
-      'message_status' => $form['dsm_param_message_status']['#value'],
-      'repeat_message' => $form['dsm_param_message_repeat']['#value'],
-    ))
-    ->execute();
-  drupal_set_message('Your parameter has been saved.');
-  drupal_goto('admin/config/dsm_param');
-}
-
-function dsm_param_delete_parameter($pid) {
+function dsm_param_get_parameter($pid) {
   $result = db_query("select * from {dsm_param_parameters} where pid = :pid", array(':pid' => $pid));
-  $parameter_message = $result->fetchObject();
-  db_delete('dsm_param_parameters')
-    ->condition('pid', $parameter_message->pid)
-    ->execute();
-  drupal_set_message("Deleted " . $parameter_message->parameter_name);
-  drupal_goto('admin/config/dsm_param');
+  return $result->fetchObject();
 }

@@ -42,6 +42,15 @@ function dsm_param_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'dsm_param.admin.inc',
   );
+  $items['admin/config/dsm_param/%/edit'] = array(
+    'title' => 'Edit Parameter Message',
+    'description' => 'Edit an existing Parameter Message.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dsm_param_edit_parameter', 3),
+    'access arguments' => array('administer parameter message'),
+    'type' => MENU_CALLBACK,
+    'file' => 'dsm_param.admin.inc',
+  );
   return $items;
 }
 
