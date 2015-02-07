@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function dsm_param_schema() {
+  $schema['dsm_param_parameters'] = array(
+    'description' => 'Stores the URL parameters the module will look for to display messages.',
+    'fields' => array(
+      'pid' => array(
+        'description' => 'The primary identifier for a dsm_param parameter.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'parameter_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'URL parameter name',
+      ),
+      'message_status' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => "The message's type, either status, warning or error.",
+      ),
+      'repeat_message' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => "If this is set to False and the message has already been set, then the message won't be repeated.",
+      ),
+    ),
+    'primary key' => array('pid'),
+    'unique keys' => array(
+      'parameter_name' => array('parameter_name'),
+    )
+  );
+  return $schema;
+}
