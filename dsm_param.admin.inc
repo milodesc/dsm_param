@@ -170,7 +170,7 @@ function dsm_param_validate_param_form($form) {
     form_set_error('dsm_param_parameter_name', "'q' is an invalid name for a parameter. Please choose another name.");
   }
 
-  if($form['edit_flag']['#value'] != 1) {
+  if(!empty($form['edit_flag']) && $form['edit_flag']['#value'] != 1) {
     // Check if name supplied is already used.
     $result = db_query('select parameter_name from {dsm_param_parameters}');
     foreach($result as $parameter) {
