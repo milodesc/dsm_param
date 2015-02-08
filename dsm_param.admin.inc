@@ -39,7 +39,7 @@ function dsm_param_admin() {
       'rows' => $rows,
       'attributes' => array('class' => array('dsm_param_config')),
     ));
-    $output .= l(t('Create a new parameter'), 'admin/config/dsm_param/create');
+    $output .= l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button'))));
   }
   else {
     $output = t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create');
