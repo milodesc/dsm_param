@@ -30,7 +30,7 @@ function dsm_param_menu() {
     'file' => 'dsm_param.admin.inc',
   );
   $items['admin/config/dsm_param/create'] = array(
-    'title' => 'Parameter Message Edit',
+    'title' => 'Create Parameter Message',
     'description' => 'Manage the Parameter Message module.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dsm_param_create_parameter'),
