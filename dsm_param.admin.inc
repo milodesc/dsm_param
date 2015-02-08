@@ -227,6 +227,10 @@ function dsm_param_get_param_form() {
 function dsm_param_validate_param_form($form) {
   $parameter_name = $form['dsm_param_parameter_name']['#value'];
 
+  if (preg_match('/[^a-z_\-0-9]/i', $parameter_name)) {
+    form_set_error('dsm_param_parameter_name', 'The Parameter Name supplied contains illegal characters. Please use only letters, numbers, underscores and dashes.');
+  }
+
   // Don't let admins create a parameter called 'q', since that is used on every
   // page request in Drupal.
   if ($parameter_name == 'q') {
