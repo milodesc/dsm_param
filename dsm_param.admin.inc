@@ -30,7 +30,7 @@ function dsm_param_admin() {
       $parameter->parameter_name,
       $parameter->message_status,
       $parameter->repeat_message,
-      l(t('Edit'), 'admin/config/dsm_param/' . $parameter->pid . '/edit') . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete'),
+      l(t('Edit'), 'admin/config/dsm_param/' . $parameter->pid . '/edit') . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete_confirm'),
     );
   }
   if (!empty($rows)) {
@@ -161,17 +161,31 @@ function dsm_param_edit_parameter_submit($form, &$form_state) {
 }
 
 /**
+ * Confirm the deletion of a Parameter Message.
+ *
+ * @see dsm_param_menu()
+ * @see dsm_param_delete_parameter()
+ */
+function dsm_param_delete_parameter_confirm($pid) {
+  $parameter_message = dsm_param_get_parameter($pid);
+  $output = '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>';
+  $output .= l(t('yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button'))));
+  $output .= l(t('no'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button'))));
+  return $output;
+}
+
+/**
  * Delete a Parameter Message.
  *
  * @see dsm_param_menu()
+ * @see dsm_param_delete_parameter_confirm()
  */
 function dsm_param_delete_parameter($pid) {
-  $result = db_query("select * from {dsm_param_parameters} where pid = :pid", array(':pid' => $pid));
-  $parameter_message = $result->fetchObject();
+  $parameter_message = dsm_param_get_parameter($pid);
   db_delete('dsm_param_parameters')
     ->condition('pid', $parameter_message->pid)
     ->execute();
-  drupal_set_message(t('Deleted the @param parameter.', array('@param', $parameter_message->parameter_name)));
+  drupal_set_message(t('Deleted the @param_name parameter.', array('@param_name' => $parameter_message->parameter_name)));
   drupal_goto('admin/config/dsm_param');
 }
 

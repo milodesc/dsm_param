@@ -38,6 +38,15 @@ function dsm_param_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'dsm_param.admin.inc',
   );
+  $items['admin/config/dsm_param/%/delete_confirm'] = array(
+    'title' => 'Delete Parameter Message',
+    'description' => 'Delete a Parameter Message.',
+    'page callback' => 'dsm_param_delete_parameter_confirm',
+    'page arguments' => array(3),
+    'access arguments' => array('administer parameter message'),
+    'type' => MENU_CALLBACK,
+    'file' => 'dsm_param.admin.inc',
+  );
   $items['admin/config/dsm_param/%/delete'] = array(
     'title' => 'Delete Parameter Message',
     'description' => 'Delete a Parameter Message.',
