@@ -6,20 +6,26 @@
  */
 
 /**
- * Returns an administrative page for the Parameter Message module where each
- * existing parameter message can be edited or deleted and new parameter
+ * Returns an administrative page for the Parameter Message module.
+ *
+ * Existing parameter messages can be edited or deleted and new parameter
  * messages can be created.
  *
  * @return string
- *   A HTML-formatted string with the administrative page content.
+ *   An HTML-formatted string with the administrative page content.
  *
  * @see dsm_param_menu()
  */
 function dsm_param_admin() {
-  $header = array(t('Parameter Name'), t('Message Status'), t('Repeat Message'), t('Edit / Delete'));
+  $header = array(
+    t('Parameter Name'),
+    t('Message Status'),
+    t('Repeat Message'),
+    t('Edit / Delete'),
+  );
   $rows = array();
   $result = db_query('select * from {dsm_param_parameters}');
-  foreach($result as $parameter) {
+  foreach ($result as $parameter) {
     $rows[] = array(
       $parameter->parameter_name,
       $parameter->message_status,
@@ -34,8 +40,9 @@ function dsm_param_admin() {
       'attributes' => array('class' => array('dsm_param_config')),
     ));
     $output .= l(t('Create a new parameter'), 'admin/config/dsm_param/create');
-  } else {
-    $output = t("There aren't any parameters currently set up. ") . l(t('Click here to set one up.'), 'admin/config/dsm_param/create');
+  }
+  else {
+    $output = t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create');
   }
   return $output;
 }
@@ -44,7 +51,7 @@ function dsm_param_admin() {
  * Returns an administrative form for creating a Parameter Message.
  *
  * @return string
- *   A HTML-formatted string with the administrative page content.
+ *   An HTML-formatted string with the administrative page content.
  *
  * @see dsm_param_menu()
  */
@@ -57,10 +64,25 @@ function dsm_param_create_parameter() {
   return $form;
 }
 
+/**
+ * Validate dsm_param_create_parameter form submissions.
+ *
+ * @see dsm_param_create_parameter()
+ * @see dsm_param_create_parameter_submit()
+ * @see dsm_param_validate_param_form()
+ */
 function dsm_param_create_parameter_validate($form, &$form_state) {
   dsm_param_validate_param_form($form);
 }
 
+/**
+ * Process dsm_param_create_parameter form submissions.
+ *
+ * Adds new parameters to the database.
+ *
+ * @see dsm_param_create_parameter()
+ * @see dsm_param_create_parameter_validate()
+ */
 function dsm_param_create_parameter_submit($form, &$form_state) {
   db_insert('dsm_param_parameters')
     ->fields(array(
@@ -73,7 +95,16 @@ function dsm_param_create_parameter_submit($form, &$form_state) {
   drupal_goto('admin/config/dsm_param');
 }
 
-function dsm_param_edit_parameter($form, $form_state,  $pid) {
+
+/**
+ * Returns an administrative form for editing a Parameter Message.
+ *
+ * @return string
+ *   An HTML-formatted string with the edit page content.
+ *
+ * @see dsm_param_menu()
+ */
+function dsm_param_edit_parameter($form, $form_state, $pid) {
   $parameter_message = dsm_param_get_parameter($pid);
   $form = dsm_param_get_param_form();
   $form['dsm_param_parameter_name']['#default_value'] = $parameter_message->parameter_name;
@@ -96,10 +127,25 @@ function dsm_param_edit_parameter($form, $form_state,  $pid) {
   return $form;
 }
 
+/**
+ * Validate dsm_param_edit_parameter form submissions.
+ *
+ * @see dsm_param_edit_parameter()
+ * @see dsm_param_edit_parameter_submit()
+ * @see dsm_param_validate_param_form()
+ */
 function dsm_param_edit_parameter_validate($form, &$form_state) {
   dsm_param_validate_param_form($form);
 }
 
+/**
+ * Process dsm_param_edit_parameter form submissions.
+ *
+ * Updates existing parameters with new values.
+ *
+ * @see dsm_param_edit_parameter()
+ * @see dsm_param_edit_parameter_validate()
+ */
 function dsm_param_edit_parameter_submit($form, &$form_state) {
   $pid = $form['dsm_param_pid']['#value'];
   db_update('dsm_param_parameters')
@@ -114,6 +160,11 @@ function dsm_param_edit_parameter_submit($form, &$form_state) {
   drupal_goto('admin/config/dsm_param');
 }
 
+/**
+ * Delete a Parameter Message.
+ *
+ * @see dsm_param_menu()
+ */
 function dsm_param_delete_parameter($pid) {
   $result = db_query("select * from {dsm_param_parameters} where pid = :pid", array(':pid' => $pid));
   $parameter_message = $result->fetchObject();
@@ -124,7 +175,13 @@ function dsm_param_delete_parameter($pid) {
   drupal_goto('admin/config/dsm_param');
 }
 
-function dsm_param_get_param_form () {
+/**
+ * Provides form fields needed for creating and editing Parameter messages.
+ *
+ * @return array
+ *   An HTML-formatted string with the edit page content.
+ */
+function dsm_param_get_param_form() {
   $form = array();
   $form['dsm_param_parameter_name'] = array(
     '#type' => 'textfield',
@@ -161,20 +218,26 @@ function dsm_param_get_param_form () {
   return $form;
 }
 
+/**
+ * Provides form validation for creating and editing parameter messages.
+ *
+ * @param array $form
+ *   The create or edit parameter message form.
+ */
 function dsm_param_validate_param_form($form) {
   $parameter_name = $form['dsm_param_parameter_name']['#value'];
 
   // Don't let admins create a parameter called 'q', since that is used on every
   // page request in Drupal.
-  if($parameter_name == 'q') {
+  if ($parameter_name == 'q') {
     form_set_error('dsm_param_parameter_name', "'q' is an invalid name for a parameter. Please choose another name.");
   }
 
-  if(!empty($form['edit_flag']) && $form['edit_flag']['#value'] != 1) {
+  if (!empty($form['edit_flag']) && $form['edit_flag']['#value'] != 1) {
     // Check if name supplied is already used.
     $result = db_query('select parameter_name from {dsm_param_parameters}');
-    foreach($result as $parameter) {
-      if($parameter_name == $parameter->parameter_name) {
+    foreach ($result as $parameter) {
+      if ($parameter_name == $parameter->parameter_name) {
         form_set_error('dsm_param_parameter_name', 'The parameter name is already in use. Please choose another name.');
       }
     }
@@ -183,18 +246,27 @@ function dsm_param_validate_param_form($form) {
   // Check the validity of the Message Status field.
   $valid_statuses = array('status', 'warning', 'error');
   $submitted_status = $form['dsm_param_message_status']['#value'];
-  if(!in_array($submitted_status, $valid_statuses)) {
+  if (!in_array($submitted_status, $valid_statuses)) {
     form_set_error('dsm_param_message_status', 'You have submitted an invalid message status. Please choose another status.');
   }
 
   // Check the validity of the Repeat Message field.
   $valid_repeat = array('TRUE', 'FALSE');
   $submitted_repeat = $form['dsm_param_message_repeat']['#value'];
-  if(!in_array($submitted_repeat, $valid_repeat)) {
+  if (!in_array($submitted_repeat, $valid_repeat)) {
     form_set_error('dsm_param_message_repeat', 'You have submitted an invalid value for the Repeat Message field. Please choose true or false.');
   }
 }
 
+/**
+ * Get a Parameter Message object based on a pid.
+ *
+ * @param int $pid
+ *   pid of the Parameter Message to be returned.
+ *
+ * @return mixed
+ *   The Parameter Message object with the specified pid.
+ */
 function dsm_param_get_parameter($pid) {
   $result = db_query("select * from {dsm_param_parameters} where pid = :pid", array(':pid' => $pid));
   return $result->fetchObject();

@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install, update and uninstall functions for the Parameter Message module.
+ */
+
+/**
  * Implements hook_schema().
  */
 function dsm_param_schema() {
@@ -35,7 +40,7 @@ function dsm_param_schema() {
     'primary key' => array('pid'),
     'unique keys' => array(
       'parameter_name' => array('parameter_name'),
-    )
+    ),
   );
   return $schema;
 }
