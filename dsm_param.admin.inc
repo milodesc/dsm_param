@@ -91,7 +91,7 @@ function dsm_param_create_parameter_submit($form, &$form_state) {
       'repeat_message' => $form['dsm_param_message_repeat']['#value'],
     ))
     ->execute();
-  drupal_set_message('Your parameter has been saved.');
+  drupal_set_message(t('The @param parameter has been saved.', array('@param' => $form['dsm_param_parameter_name']['#value'])));
   drupal_goto('admin/config/dsm_param');
 }
 
@@ -156,7 +156,7 @@ function dsm_param_edit_parameter_submit($form, &$form_state) {
     ))
     ->condition('pid', $pid)
     ->execute();
-  drupal_set_message('The ' . $form['dsm_param_parameter_name']['#value'] . ' parameter was saved.');
+  drupal_set_message(t('The @param parameter has been saved.', array('@param' => $form['dsm_param_parameter_name']['#value'])));
   drupal_goto('admin/config/dsm_param');
 }
 
@@ -171,7 +171,7 @@ function dsm_param_delete_parameter($pid) {
   db_delete('dsm_param_parameters')
     ->condition('pid', $parameter_message->pid)
     ->execute();
-  drupal_set_message("Deleted " . $parameter_message->parameter_name);
+  drupal_set_message(t('Deleted the @param parameter.', array('@param', $parameter_message->parameter_name)));
   drupal_goto('admin/config/dsm_param');
 }
 
