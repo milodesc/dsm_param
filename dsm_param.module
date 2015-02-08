@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Adds functionality for setting a drupal message when parameters are present.
+ */
+
+/**
  * Implements hook_permission().
  */
 function dsm_param_permission() {
@@ -8,7 +13,7 @@ function dsm_param_permission() {
     'administer parameter message' => array(
       'title' => t('Administer the Parameter Message module.'),
       'description' => t('Perform administration tasks on the Parameter Message module.'),
-    )
+    ),
   );
 }
 
@@ -58,11 +63,10 @@ function dsm_param_menu() {
  * Implements hook_init().
  */
 function dsm_param_init() {
-  // Get all parameters that have been configured
-  // For each, search the URL parameters
-  // If match found, set message
+  // Get all parameters that have been configured. For each, search the URL
+  // parameters. If match found, set message.
   $result = db_query('select * from {dsm_param_parameters}');
-  foreach($result as $parameter) {
+  foreach ($result as $parameter) {
     $target_param_name = $parameter->parameter_name;
     if (!empty($_GET[$target_param_name])) {
       $msg = filter_xss($_GET[$target_param_name]);
