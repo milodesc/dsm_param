@@ -21,7 +21,7 @@ function dsm_param_admin() {
     t('Parameter Name'),
     t('Message Status'),
     t('Repeat Message'),
-    t('Edit / Delete'),
+    t('Action'),
   );
   $rows = array();
   $result = db_query('select * from {dsm_param_parameters}');
