@@ -33,16 +33,27 @@ function dsm_param_admin() {
       l(t('Edit'), 'admin/config/dsm_param/' . $parameter->pid . '/edit') . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete_confirm'),
     );
   }
+  $output = array();
   if (!empty($rows)) {
-    $output = theme('table', array(
+    $dsm_table = theme('table', array(
       'header' => $header,
       'rows' => $rows,
       'attributes' => array('class' => array('dsm_param_config')),
     ));
-    $output .= l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button'))));
+    $output['dsm_table'] = array(
+      'type' => 'markup',
+      '#markup' => $dsm_table,
+    );
+    $output['message'] = array(
+      'type' => 'markup',
+      '#markup' => l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button')))),
+    );
   }
   else {
-    $output = t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create');
+    $output['message'] = array(
+      'type' => 'markup',
+      '#markup' => t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create'),
+    );
   }
   return $output;
 }
