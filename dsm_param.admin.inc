@@ -33,16 +33,27 @@ function dsm_param_admin() {
       l(t('Edit'), 'admin/config/dsm_param/' . $parameter->pid . '/edit') . ' | ' . l(t('Delete'), 'admin/config/dsm_param/' . $parameter->pid . '/delete_confirm'),
     );
   }
+  $output = array();
   if (!empty($rows)) {
-    $output = theme('table', array(
+    $dsm_table = theme('table', array(
       'header' => $header,
       'rows' => $rows,
       'attributes' => array('class' => array('dsm_param_config')),
     ));
-    $output .= l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button'))));
+    $output['dsm_table'] = array(
+      'type' => 'markup',
+      '#markup' => $dsm_table,
+    );
+    $output['message'] = array(
+      'type' => 'markup',
+      '#markup' => l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button')))),
+    );
   }
   else {
-    $output = t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create');
+    $output['message'] = array(
+      'type' => 'markup',
+      '#markup' => t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create'),
+    );
   }
   return $output;
 }
@@ -168,9 +179,20 @@ function dsm_param_edit_parameter_submit($form, &$form_state) {
  */
 function dsm_param_delete_parameter_confirm($pid) {
   $parameter_message = dsm_param_get_parameter($pid);
-  $output = '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>';
-  $output .= l(t('yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button'))));
-  $output .= l(t('no'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button'))));
+  $output = array(
+    'question' => array(
+      '#type' => 'markup',
+      '#markup' => '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>',
+    ),
+    'yes_button' => array(
+      '#type' => 'markup',
+      '#markup' => l(t('Yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button')))),
+    ),
+    'no_button' => array(
+      '#type' => 'markup',
+      '#markup' => l(t('No'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button')))),
+    ),
+  );
   return $output;
 }
 
