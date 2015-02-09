@@ -168,9 +168,20 @@ function dsm_param_edit_parameter_submit($form, &$form_state) {
  */
 function dsm_param_delete_parameter_confirm($pid) {
   $parameter_message = dsm_param_get_parameter($pid);
-  $output = '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>';
-  $output .= l(t('yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button'))));
-  $output .= l(t('no'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button'))));
+  $output = array(
+    'question' => array(
+      '#type' => 'markup',
+      '#markup' => '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>',
+    ),
+    'yes_button' => array(
+      '#type' => 'markup',
+      '#markup' => l(t('Yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button')))),
+    ),
+    'no_button' => array(
+      '#type' => 'markup',
+      '#markup' => l(t('No'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button')))),
+    ),
+  );
   return $output;
 }
 
