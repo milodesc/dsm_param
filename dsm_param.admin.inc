@@ -35,24 +35,32 @@ function dsm_param_admin() {
   }
   $output = array();
   if (!empty($rows)) {
-    $dsm_table = theme('table', array(
-      'header' => $header,
-      'rows' => $rows,
-      'attributes' => array('class' => array('dsm_param_config')),
-    ));
     $output['dsm_table'] = array(
-      'type' => 'markup',
-      '#markup' => $dsm_table,
+      '#theme' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
     );
     $output['message'] = array(
-      'type' => 'markup',
-      '#markup' => l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button')))),
+      '#theme' => 'link',
+      '#text' => t('Create a new parameter'),
+      '#path' => 'admin/config/dsm_param/create',
+      '#options' => array('attributes' => array('class' => array('button'))),
     );
   }
   else {
     $output['message'] = array(
-      'type' => 'markup',
-      '#markup' => t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create'),
+      'notice_text' => array(
+        'type' => 'markup',
+        '#markup' => t("There aren't any parameters currently set up."),
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+      ),
+      'create_link' => array(
+        '#theme' => 'link',
+        '#text' => t('Create a parameter'),
+        '#path' => 'admin/config/dsm_param/create',
+        '#options' => array('attributes' => array('class' => array('button'))),
+      ),
     );
   }
   return $output;
