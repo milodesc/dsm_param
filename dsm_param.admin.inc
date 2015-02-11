@@ -41,9 +41,9 @@ function dsm_param_admin() {
       '#rows' => $rows,
     );
     $output['message'] = array(
-      '#theme' => 'link',
-      '#text' => t('Create a new parameter'),
-      '#path' => 'admin/config/dsm_param/create',
+      '#type' => 'link',
+      '#title' => t('Create a new parameter'),
+      '#href' => 'admin/config/dsm_param/create',
       '#options' => array('attributes' => array('class' => array('button'))),
     );
   }
@@ -56,9 +56,9 @@ function dsm_param_admin() {
         '#suffix' => '</p>',
       ),
       'create_link' => array(
-        '#theme' => 'link',
-        '#text' => t('Create a parameter'),
-        '#path' => 'admin/config/dsm_param/create',
+        '#type' => 'link',
+        '#title' => t('Create a parameter'),
+        '#href' => 'admin/config/dsm_param/create',
         '#options' => array('attributes' => array('class' => array('button'))),
       ),
     );
