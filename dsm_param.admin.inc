@@ -35,24 +35,32 @@ function dsm_param_admin() {
   }
   $output = array();
   if (!empty($rows)) {
-    $dsm_table = theme('table', array(
-      'header' => $header,
-      'rows' => $rows,
-      'attributes' => array('class' => array('dsm_param_config')),
-    ));
     $output['dsm_table'] = array(
-      'type' => 'markup',
-      '#markup' => $dsm_table,
+      '#theme' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
     );
     $output['message'] = array(
-      'type' => 'markup',
-      '#markup' => l(t('Create a new parameter'), 'admin/config/dsm_param/create', array('attributes' => array('class' => array('button')))),
+      '#type' => 'link',
+      '#title' => t('Create a new parameter'),
+      '#href' => 'admin/config/dsm_param/create',
+      '#options' => array('attributes' => array('class' => array('button'))),
     );
   }
   else {
     $output['message'] = array(
-      'type' => 'markup',
-      '#markup' => t("There aren't any parameters currently set up.") . " " . l(t('Click here to set one up.'), 'admin/config/dsm_param/create'),
+      'notice_text' => array(
+        'type' => 'markup',
+        '#markup' => t("There aren't any parameters currently set up."),
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+      ),
+      'create_link' => array(
+        '#type' => 'link',
+        '#title' => t('Create a parameter'),
+        '#href' => 'admin/config/dsm_param/create',
+        '#options' => array('attributes' => array('class' => array('button'))),
+      ),
     );
   }
   return $output;
@@ -185,12 +193,16 @@ function dsm_param_delete_parameter_confirm($pid) {
       '#markup' => '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>',
     ),
     'yes_button' => array(
-      '#type' => 'markup',
-      '#markup' => l(t('Yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button')))),
+      '#type' => 'link',
+      '#title' => t('Yes'),
+      '#href' => 'admin/config/dsm_param/' . $pid . '/delete',
+      '#options' => array('attributes' => array('class' => array('button'))),
     ),
     'no_button' => array(
-      '#type' => 'markup',
-      '#markup' => l(t('No'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button')))),
+      '#type' => 'link',
+      '#title' => t('No'),
+      '#href' => 'admin/config/dsm_param',
+      '#options' => array('attributes' => array('class' => array('button'))),
     ),
   );
   return $output;
