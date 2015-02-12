@@ -193,12 +193,16 @@ function dsm_param_delete_parameter_confirm($pid) {
       '#markup' => '<p>' . t('Are you sure you want to delete the @param_name parameter?', array('@param_name' => $parameter_message->parameter_name)) . '</p>',
     ),
     'yes_button' => array(
-      '#type' => 'markup',
-      '#markup' => l(t('Yes'), 'admin/config/dsm_param/' . $pid . '/delete', array('attributes' => array('class' => array('button')))),
+      '#type' => 'link',
+      '#title' => t('Yes'),
+      '#href' => 'admin/config/dsm_param/' . $pid . '/delete',
+      '#options' => array('attributes' => array('class' => array('button'))),
     ),
     'no_button' => array(
-      '#type' => 'markup',
-      '#markup' => l(t('No'), 'admin/config/dsm_param', array('attributes' => array('class' => array('button')))),
+      '#type' => 'link',
+      '#title' => t('No'),
+      '#href' => 'admin/config/dsm_param',
+      '#options' => array('attributes' => array('class' => array('button'))),
     ),
   );
   return $output;
